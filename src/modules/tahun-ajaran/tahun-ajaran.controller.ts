@@ -10,8 +10,9 @@ import {
 import { TahunAjaranService } from './tahun-ajaran.service';
 import { CreateTahunAjaranDto } from './dto/create-tahun-ajaran.dto';
 import { UpdateTahunAjaranDto } from './dto/update-tahun-ajaran.dto';
-import { request } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Tahun Ajaran')
 @Controller('tahun-ajaran')
 export class TahunAjaranController {
   constructor(private readonly tahunAjaranService: TahunAjaranService) {}

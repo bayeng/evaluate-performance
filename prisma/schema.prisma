@@ -61,6 +61,7 @@ model jabatan {
   id         Int          @id @default(autoincrement())
   name       String
   DetailUser DetailUser[]
+  kredit     kredit[]
 }
 
 model Bkd {
@@ -143,6 +144,8 @@ model kredit {
   total        Int
   skpId        Int
   skp          Skp        @relation(fields: [skpId], references: [id])
+  jabatanId    Int
+  jabatan      jabatan    @relation(fields: [jabatanId], references: [id])
   detailUserId Int
   detailUser   DetailUser @relation(fields: [detailUserId], references: [id])
   createdAt    DateTime   @default(now())

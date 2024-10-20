@@ -5,7 +5,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class PromotionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findTotalKreditUserByJabatan(query) {
+  async findTotalKreditUserByJabatan(query: { detailUserId: string }) {
     const { detailUserId } = query;
 
     const detailUser = await this.prisma.detailUser.findUnique({
@@ -25,6 +25,7 @@ export class PromotionService {
         },
         where: {
           detailUserId: Number(detailUserId),
+          jabatanId: Number(detailUser.jabatanId),
         },
       });
 

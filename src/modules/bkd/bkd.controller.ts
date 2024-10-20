@@ -15,7 +15,9 @@ import { CreateBkdDto } from './dto/create-bkd.dto';
 import { UpdateBkdDto } from './dto/update-bkd.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadInterceptor } from '../../upload/upload.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('bkd')
 @Controller('bkd')
 export class BkdController {
   constructor(private readonly bkdService: BkdService) {}

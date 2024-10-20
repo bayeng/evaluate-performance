@@ -16,7 +16,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadInterceptor } from '../../upload/upload.service';
 import { EvaluateSkpDto } from './dto/evaluate-skp.dto';
 import { ResponseHelper } from '../../helper/response.helper';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('SKP')
 @Controller('skp')
 export class SkpController {
   constructor(private readonly skpService: SkpService) {}

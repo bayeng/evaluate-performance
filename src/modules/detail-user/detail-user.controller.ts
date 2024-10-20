@@ -13,7 +13,9 @@ import { DetailUserService } from './detail-user.service';
 import { CreateDetailUserDto } from './dto/create-detail-user.dto';
 import { UpdateDetailUserDto } from './dto/update-detail-user.dto';
 import { ResponseHelper } from '../../helper/response.helper';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('detail-user')
 @Controller('detail-users')
 export class DetailUserController {
   constructor(private readonly detailUserService: DetailUserService) {}

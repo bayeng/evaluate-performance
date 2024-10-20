@@ -12,7 +12,9 @@ import { JabatanService } from './jabatan.service';
 import { ResponseHelper } from '../../helper/response.helper';
 import { CreateJabatanDto } from './dto/create-jabatan.dto';
 import { UpdateJabatanDto } from './dto/update-jabatan.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Jabatan')
 @Controller('jabatan')
 export class JabatanController {
   constructor(private readonly jabatanService: JabatanService) {}
