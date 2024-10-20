@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model TypeDosen {
+  id         Int          @id @default(autoincrement())
+  name       String
+  DetailUser DetailUser[]
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String
+  User User[]
+}
+
+model TahunAjaran {
+  id       Int    @id @default(autoincrement())
+  semester String
+  tahun    String
+  Bkd      Bkd[]
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  username   String       @db.VarChar(100)
+  password   String       @db.VarChar(100)
+  roleId     Int
+  role       Role         @relation(fields: [roleId], references: [id])
+  detailUser DetailUser[]
+}
+
+model DetailUser {
+  id          Int       @id @default(autoincrement())
+  nama        String
+  nip         String
+  tmt         String
+  jabatanId   Int
+  jabatan     jabatan   @relation(fields: [jabatanId], references: [id])
+  userId      Int       @unique
+  user        User      @relation(fields: [userId], references: [id])
+  typeDosenId Int
+  typeDosen   TypeDosen @relation(fields: [typeDosenId], references: [id])
+  kredit      kredit[]
+  Bkd         Bkd[]
+  Skp         Skp[]
+}
+
+model jabatan {
+  id         Int          @id @default(autoincrement())
+  name       String
+  DetailUser DetailUser[]
+}
+
+model Bkd {
+  id               Int         @id @default(autoincrement())
+  file             String
+  statusCheckValue Int         @db.TinyInt
+  tahunAjaranId    Int
+  tahunAjaran      TahunAjaran @relation(fields: [tahunAjaranId], references: [id])
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  Artikel          Artikel[]
+  detailUserId     Int
+  DetailUser       DetailUser? @relation(fields: [detailUserId], references: [id])
+}
+
+model Artikel {
+  id        Int      @id @default(autoincrement())
+  link      String
+  nilai     Int      @db.TinyInt
+  bkdId     Int
+  bkd       Bkd      @relation(fields: [bkdId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Skp {
+  id                         Int        @id @default(autoincrement())
+  file                       String
+  tahun                      String
+  hasilKerja1                String?
+  hasilKerja1Value           Int?
+  hasilKerja2                String?
+  hasilKerja2Value           Int?
+  statusCheckValue           Int        @default(0) @db.TinyInt
+  beroriantasiPelayanan      String?
+  berorientasiPelayananValue Int?       @db.TinyInt
+  akuntabel                  String?
+  akuntabelValue             Int?       @db.TinyInt
+  kompeten                   String?
+  kompetenValue              Int?       @db.TinyInt
+  harmonis                   String?
+  harmonisValue              Int?       @db.TinyInt
+  loyal                      String?
+  loyalValue                 Int?       @db.TinyInt
+  adaptif                    String?
+  adaptifValue               Int?       @db.TinyInt
+  kolaboratif                String?
+  kolaboratifValue           Int?       @db.TinyInt
+  ratingPerilakuKerja        String?
+  predikatKinerjaPegawai     String?
+  hasilKerja                 String?
+  detailUserId               Int
+  detailUser                 DetailUser @relation(fields: [detailUserId], references: [id])
+  createdAt                  DateTime   @default(now())
+  updatedAt                  DateTime   @updatedAt
+  // nilaiPerilaku              nilaiPerilaku[]
+  kredit                     kredit[]
+}
+
+// model nilaiPerilaku {
+//   id                         Int      @id @default(autoincrement())
+//   berorientasiPelayananValue Int      @db.TinyInt
+//   akuntabelValue             Int      @db.TinyInt
+//   kompetenValue              Int      @db.TinyInt
+//   harmonisValue              Int      @db.TinyInt
+//   loyalValue                 Int      @db.TinyInt
+//   adaptifValue               Int      @db.TinyInt
+//   kolaboratifValue           Int      @db.TinyInt
+//   totalPerilakuKerjaValue    Int      @db.TinyInt
+//   predikatPegawaiValue       Int      @db.TinyInt
+//   skpId                      Int      @unique
+//   skp                        Skp      @relation(fields: [skpId], references: [id])
+//   createdAt                  DateTime @default(now())
+//   updatedAt                  DateTime @updatedAt
+//   kredit                     kredit[]
+// }
+
+model kredit {
+  id           BigInt     @id @default(autoincrement())
+  total        Int
+  skpId        Int
+  skp          Skp        @relation(fields: [skpId], references: [id])
+  detailUserId Int
+  detailUser   DetailUser @relation(fields: [detailUserId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model logs {
+  id        BigInt   @id @default(autoincrement())
+  group     String
+  message   String
+  createdAt DateTime @default(now())
+}
