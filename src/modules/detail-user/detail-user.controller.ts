@@ -61,7 +61,7 @@ export class DetailUserController {
     @Body() request: UpdateDetailUserDto,
   ) {
     try {
-      const data = await this.detailUserService.findOneDetailUser(+id);
+      const data = await this.detailUserService.updateDetailUser(+id, request);
 
       return ResponseHelper.success(
         HttpStatus.OK,
