@@ -5,12 +5,7 @@ export class CreateSkpDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  file: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  tahun: string;
+  tahunAjaranId: string;
 
   @ApiProperty()
   @IsNumber()

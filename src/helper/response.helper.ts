@@ -10,11 +10,17 @@ export class ResponseHelper {
     this.data = data;
   }
 
-  static success(statusCode: number, message: string, data: any) {
+  static success(
+    statusCode: number,
+    message: string,
+    data: any,
+    totalData?: any,
+  ) {
     return {
       statusCode: statusCode,
       message: message,
       data: data,
+      totalData: totalData ?? null,
     };
   }
 

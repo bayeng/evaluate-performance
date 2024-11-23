@@ -20,5 +20,10 @@ export class CreateBkdDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  detailUserId: number;
+  semesterValue: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  linkArtikel: string;
 }

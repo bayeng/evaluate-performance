@@ -17,6 +17,8 @@ import { FileUploadInterceptor } from '../../upload/upload.service';
 import { EvaluateSkpDto } from './dto/evaluate-skp.dto';
 import { ResponseHelper } from '../../helper/response.helper';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateSkpDto } from './dto/create-skp.dto';
+import { QuerySkpDto } from './dto/query-skp.dto';
 
 @ApiTags('SKP')
 @Controller('skp')
@@ -28,11 +30,11 @@ export class SkpController {
     FileInterceptor('skp', new FileUploadInterceptor().createMulterOptions()),
   )
   async createSkp(
-    @Body() createSkpDto,
+    @Body() request: CreateSkpDto,
     @UploadedFile() skp: Express.Multer.File,
   ) {
     try {
-      const skpCreated = await this.skpService.createSkp(createSkpDto, skp);
+      const skpCreated = await this.skpService.createSkp(request, skp);
       return ResponseHelper.success(
         HttpStatus.CREATED,
         'Success create SKP',
@@ -44,7 +46,7 @@ export class SkpController {
   }
 
   @Get()
-  async findAllSkpByFilter(@Query() query: any) {
+  async findAllSkpByFilter(@Query() query: QuerySkpDto) {
     try {
       const skp = await this.skpService.findAllSkpByFilters(query);
 

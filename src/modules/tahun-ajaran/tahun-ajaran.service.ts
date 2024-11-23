@@ -9,12 +9,11 @@ export class TahunAjaranService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createTahunAjaran(request: CreateTahunAjaranDto) {
-    const { tahun, semester } = request;
+    const { tahun } = request;
     try {
       const tahunAjaran = await this.prisma.tahunAjaran.create({
         data: {
           tahun: tahun,
-          semester: Value.semester[Number(semester)],
         },
       });
 
@@ -54,7 +53,7 @@ export class TahunAjaranService {
   }
 
   async updateTahunAjaran(id: number, request: UpdateTahunAjaranDto) {
-    const { tahun, semester } = request;
+    const { tahun } = request;
 
     const isExist = await this.prisma.tahunAjaran.findUnique({
       where: {
@@ -72,7 +71,6 @@ export class TahunAjaranService {
         },
         data: {
           tahun: tahun,
-          semester: Value.semester[Number(semester)],
         },
       });
 

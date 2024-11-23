@@ -5,18 +5,20 @@ import { join } from 'path';
 import * as fs from 'node:fs';
 import * as ExcelJS from 'exceljs';
 import { EvaluateSkpDto } from './dto/evaluate-skp.dto';
+import { CreateSkpDto } from './dto/create-skp.dto';
+import { QuerySkpDto } from './dto/query-skp.dto';
 
 @Injectable()
 export class SkpService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createSkp(request, file) {
-    const { tahun, statusCheckValue, detailUserId } = request;
+  async createSkp(request: CreateSkpDto, file) {
+    const { tahunAjaranId, statusCheckValue, detailUserId } = request;
     try {
       const skp = await this.prisma.skp.create({
         data: {
           file: 'skp/' + file.filename,
-          tahun: tahun,
+          tahunAjaranId: Number(tahunAjaranId),
           statusCheckValue: Number(statusCheckValue),
           detailUserId: Number(detailUserId),
         },
@@ -29,7 +31,7 @@ export class SkpService {
     }
   }
 
-  async findAllSkpByFilters(query) {
+  async findAllSkpByFilters(query: QuerySkpDto) {
     const page = Number(query.page) || 1;
     const limit = Number(query.limit) || 10;
     const offset = (page - 1) * limit;
@@ -71,7 +73,10 @@ export class SkpService {
       throw new HttpException('skp not found', HttpStatus.NOT_FOUND);
     }
     if (getSkp.statusCheckValue === 1) {
-      throw new HttpException('skp already approved', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'skp has approved not allowed for edit',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     try {
@@ -285,7 +290,7 @@ export class SkpService {
       await this.prisma.logs.create({
         data: {
           group: 'UPDATE',
-          message: `Update SKP id ${id} by ${getPemimpin.id} ${getPemimpin.nama}`,
+          message: `SKP evaluated - id ${id} by ${getPemimpin.id} ${getPemimpin.nama}`,
         },
       });
 
@@ -303,6 +308,19 @@ export class SkpService {
       await this.prisma.skp.delete({
         where: {
           id: id,
+        },
+      });
+
+      const getPemimpin = await this.prisma.detailUser.findUnique({
+        where: {
+          id: Number(id),
+        },
+      });
+
+      await this.prisma.logs.create({
+        data: {
+          group: 'DELETE',
+          message: `Delete SKP id ${id} by (${getPemimpin.id}) ${getPemimpin.nama}`,
         },
       });
 

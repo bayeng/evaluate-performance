@@ -16,4 +16,29 @@ export class CreateUserDto {
   @IsOptional()
   @IsNumber()
   roleId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  nama: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  nip: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  tmt: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  jabatanId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  typeDosenId: number;
 }

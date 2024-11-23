@@ -6,9 +6,4 @@ export class CreateTahunAjaranDto {
   @IsNotEmpty()
   @IsString()
   tahun: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  semester: number;
 }

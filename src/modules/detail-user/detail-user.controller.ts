@@ -8,36 +8,53 @@ import {
   Delete,
   HttpStatus,
   Query,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { DetailUserService } from './detail-user.service';
 import { CreateDetailUserDto } from './dto/create-detail-user.dto';
 import { UpdateDetailUserDto } from './dto/update-detail-user.dto';
 import { ResponseHelper } from '../../helper/response.helper';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../../auth/auth.guard';
 
 @ApiTags('detail-user')
 @Controller('detail-users')
+@UseGuards(AuthGuard)
 export class DetailUserController {
   constructor(private readonly detailUserService: DetailUserService) {}
 
-  @Post()
-  async createDetailuser(@Body() request: CreateDetailUserDto) {
-    try {
-      const data = await this.detailUserService.createDetailUser(request);
-      return ResponseHelper.success(
-        HttpStatus.CREATED,
-        'user detail created',
-        data,
-      );
-    } catch (e) {
-      throw ResponseHelper.error(HttpStatus.INTERNAL_SERVER_ERROR, e.message);
-    }
-  }
-
+  @ApiResponse({
+    example: {
+      statusCode: 200,
+      message: 'user details found',
+      data: [
+        {
+          id: 1,
+          nama: 'bayeng',
+          nip: '23423425',
+          tmt: '12-08-2002',
+          jabatanId: 1,
+          userId: 1,
+          typeDosenId: 1,
+        },
+        {
+          id: 2,
+          nama: 'kunam',
+          nip: '23423425',
+          tmt: '12-08-2002',
+          jabatanId: 1,
+          userId: 2,
+          typeDosenId: 1,
+        },
+      ],
+    },
+  })
   @Get()
   async findAllDetailUser(@Query() query: any) {
     try {
-      const datas = await this.detailUserService.findAllDetailUser(query);
+      const datas =
+        await this.detailUserService.findAllDetailUserByFilter(query);
       return ResponseHelper.success(HttpStatus.OK, 'user details found', datas);
     } catch (e) {
       throw ResponseHelper.error(HttpStatus.INTERNAL_SERVER_ERROR, e.message);
@@ -45,47 +62,18 @@ export class DetailUserController {
   }
 
   @Get(':id')
-  async findOneDetailUser(@Param('id') id: string) {
+  async findOneDetailUser(@Param('id') id: string, @Req() req: any) {
     try {
-      const data = await this.detailUserService.findOneDetailUser(+id);
+      const data = await this.detailUserService.findOneDetailUser(
+        +id,
+        req.user,
+      );
       return ResponseHelper.success(HttpStatus.OK, 'user detail found', data);
     } catch (e) {
       throw ResponseHelper.error(
         HttpStatus.INTERNAL_SERVER_ERROR,
         'internal server error',
       );
-    }
-  }
-
-  @Patch(':id')
-  async updateDetailUser(
-    @Param('id') id: string,
-    @Body() request: UpdateDetailUserDto,
-  ) {
-    try {
-      const data = await this.detailUserService.updateDetailUser(+id, request);
-
-      return ResponseHelper.success(
-        HttpStatus.OK,
-        'success update user detail',
-        data,
-      );
-    } catch (e) {
-      throw ResponseHelper.error(e.status, e.message);
-    }
-  }
-
-  @Delete(':id')
-  async removeDetailUser(@Param('id') id: string) {
-    try {
-      await this.detailUserService.removeDetailUser(+id);
-      return ResponseHelper.success(
-        HttpStatus.OK,
-        'Success delete user detail',
-        id,
-      );
-    } catch (e) {
-      throw ResponseHelper.error(e.status, e.message);
     }
   }
 }

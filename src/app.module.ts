@@ -6,11 +6,20 @@ import { DetailUserModule } from './modules/detail-user/detail-user.module';
 import { UserModule } from './modules/user/user.module';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
-import { ArtikelModule } from './modules/artikel/artikel.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [BkdModule, SkpModule, TahunAjaranModule, DetailUserModule, UserModule, PrismaModule, ArtikelModule, PromotionModule],
+  imports: [
+    BkdModule,
+    SkpModule,
+    TahunAjaranModule,
+    DetailUserModule,
+    UserModule,
+    PrismaModule,
+    PromotionModule,
+    AuthModule,
+  ],
   controllers: [],
   providers: [PrismaService],
 })
